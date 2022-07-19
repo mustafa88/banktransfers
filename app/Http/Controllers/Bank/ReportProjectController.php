@@ -68,6 +68,8 @@ class ReportProjectController extends Controller
             $requset->tdate =  date('Y-12-31') ;
         }
 
+
+        
         $enterprise = Enterprise::with(['project'])->get();
         $city = City::get();
         //return $city;
@@ -282,8 +284,8 @@ class ReportProjectController extends Controller
         $result = DB::table('banksline')
             ->select('enterprise.name as enterp','projects.name as proj'
                 ,'city.city_name','title_two.ttwo_text'
-                ,'expense.name as expensename'
-                ,'income.name as incomename'
+                //,'expense.name as expensename'
+                //,'income.name as incomename'
                 ,DB::raw("round(sum(banksdetail.amountmandatory),2) as amountmandatory")
                 ,DB::raw("round(sum(banksdetail.amountright),2) as amountright")
                 ,DB::raw("round(sum(banksdetail.amountright-banksdetail.amountmandatory),2) as total_neto")
@@ -311,13 +313,13 @@ class ReportProjectController extends Controller
         }
 
         $result->groupBy('enterprise.name','title_two.ttwo_text','projects.name','city.city_name')
-            ->groupBy('expense.name','income.name')
+            //->groupBy('expense.name','income.name')
             ->orderBy('enterprise.name')
             ->orderBy('title_two.ttwo_text')
             ->orderBy('projects.name')
-            ->orderBy('city.city_name')
-            ->orderBy('expense.name')
-            ->orderBy('income.name');
+            ->orderBy('city.city_name');
+            //->orderBy('expense.name')
+            //->orderBy('income.name');
 
         if($type==1){
             // רק חובה
@@ -325,10 +327,18 @@ class ReportProjectController extends Controller
             //$result->whereNotNull('expense.name');
             //פירוט רק עבור תשלומים לספקים
             $result->where('banksline.id_titletwo' ,2);
+
+            $result->addSelect('expense.name as expensename')
+                ->groupBy('expense.name')
+                ->orderBy('expense.name');
         }elseif ($type==2){
             //רק זכות
             $result->where('banksline.amountright',"!=" ,0);
             //$result->whereNotNull('income.name');
+
+            $result->addSelect('income.name as incomename')
+                ->groupBy('income.name')
+                ->orderBy('income.name');
 
         }
 
@@ -352,8 +362,8 @@ class ReportProjectController extends Controller
         $result = DB::table('banksline')
             ->select('enterprise.name as enterp','projects.name as proj'
                 ,'city.city_name','title_two.ttwo_text'
-                ,'expense.name as expensename'
-                ,'income.name as incomename'
+                //,'expense.name as expensename'
+                //,'income.name as incomename'
                 ,DB::raw("(DATE_FORMAT(datemovement, '%m-%Y')) as month_year")
                 ,DB::raw("round(sum(banksdetail.amountmandatory),2) as amountmandatory")
                 ,DB::raw("round(sum(banksdetail.amountright),2) as amountright")
@@ -382,15 +392,15 @@ class ReportProjectController extends Controller
         }
 
         $result->groupBy('enterprise.name','title_two.ttwo_text','projects.name','city.city_name')
-            ->groupBy('expense.name','income.name')
+            //->groupBy('expense.name','income.name')
             ->groupBy(DB::raw("(DATE_FORMAT(datemovement, '%m-%Y'))"))
 
             ->orderBy('enterprise.name')
             ->orderBy('title_two.ttwo_text')
             ->orderBy('projects.name')
             ->orderBy('city.city_name')
-            ->orderBy('expense.name')
-            ->orderBy('income.name')
+            //->orderBy('expense.name')
+            //->orderBy('income.name')
             ->orderBy(DB::raw("(DATE_FORMAT(datemovement, '%m-%Y'))"));
 
         if($type==1){
@@ -399,6 +409,10 @@ class ReportProjectController extends Controller
             //$result->whereNotNull('expense.name');
             //פירוט רק עבור תשלומים לספקים
             $result->where('banksline.id_titletwo' ,2);
+
+            $result->addSelect('expense.name as expensename')
+                ->groupBy('expense.name')
+                ->orderBy('expense.name');
         }elseif ($type==2){
             //רק זכות
             $result->where('banksline.amountright',"!=" ,0);

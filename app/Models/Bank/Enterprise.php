@@ -2,11 +2,14 @@
 
 namespace App\Models\bank;
 
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\bank\Projects;
 use App\Models\bank\Banks;
 use App\Models\Bank\Campaigns;
+use App\Models\Bank\Donateworth;
+
 class Enterprise extends Model
 {
     use HasFactory;
@@ -29,5 +32,7 @@ class Enterprise extends Model
         return $this->hasMany(Banksline::class,'id_enter','id');
     }
 
-
+    public function donateworth(){
+        return $this->hasMany(Donateworth::class,'id_enter','id');
+    }
 }

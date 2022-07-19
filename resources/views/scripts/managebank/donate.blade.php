@@ -74,27 +74,7 @@
          * save new data or update data exists
          */
         $('#btn_save').on( 'click', function () {
-            /**
-            if (!$('#myform').parsley().validate() ) {
-                return false;
-            }
-             **/
 
-            /**
-            let dropmenu=`<div class="btn-group mb-1">
-                                    <button class="btn dropdown-toggle btn-primary" type="button" data-toggle="dropdown"
-                                            aria-expanded="false">בחר
-                                    </button>
-                                    <div class="dropdown-menu dropmenu" role="menu" x-placement="bottom-start">
-                                        <a class="dropdown-item edit_row" href="javascript:void(0)" data-idline="ID_LINE"><i class="far fa-edit"></i> עריכה</a>
-                                        <a class="dropdown-item delete_row" href="javascript:void(0)" data-idline="ID_LINE"><i class="far fa-trash-alt"></i> מחיקה</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item detail_row" href="{{route('linedetail.show','ID_LINE')}}" data-idline="ID_LINE">עריכת פירוט שורה</a>
-                                    </div>
-                                </div>
-                                <label class="c-checkbox"><input type="checkbox" name="selectbox[]" value="ID_LINE">
-                                <span class="fa fa-check"></span>סמן שורה</label>`;
-                  **/
             let id_line = $("#id_line").val();
 
             if((id_line=='0' && myRowTable!=null) || (id_line!='0' && myRowTable==null)){
@@ -108,7 +88,7 @@
                 //notify('insert');
                 //return;
 
-                let url= '{{ route('linebanks.storeajax',$bank['id_bank']) }}';
+                //let url= '  route('linebanks.storeajax',$bank['id_bank']) ';
                 let resultAjax = SendToAjax(url,'POST');
                 console.log(resultAjax);
                 if(resultAjax==undefined){
@@ -151,7 +131,7 @@
                 //return;
                 //update
                 //notify('update');
-                let url= '{{ route('linebanks.updateajax',['id_bank' => $bank['id_bank']]) }}';
+                //let url= '  route('linebanks.updateajax',['id_bank' => $bank['id_bank']])   ';
                 url +="/"+id_line;
                 let resultAjax = SendToAjax(url,'PUT');
                 console.log(resultAjax);
@@ -213,7 +193,7 @@
             var fdate= $("#fromdate").val();
             var tdate= $("#todate").val();
             var showTitleTwo= $("#showTitleTwo").val();
-            let url='{{ route('linebanks.show',['id_bank' => $bank['id_bank']]) }}';
+            //let url='  route('linebanks.show',['id_bank' => $bank['id_bank']]) ';
 
             if(fdate=="" || tdate==""){
                 notify("תאריך לא תקין" ,"error");
@@ -237,7 +217,7 @@
             //return;
 
             //['id' => $artist->id, 'name' => $artist->name]
-            let url='{{ route('linebanks.editajax',['id_bank' => $bank['id_bank']]) }}';
+            //let url='  route('linebanks.editajax',['id_bank' => $bank['id_bank']])  ';
             url +="/"+idline;
             //alert(url);
 
@@ -274,7 +254,7 @@
             var aData = myTable.row(nRow).data();
             let idline = $(this).data('idline');
             $("#id_line").val(idline);
-            let url= '{{ route('linebanks.deleteajax',['id_bank' => $bank['id_bank']]) }}';
+            //let url= ' route('linebanks.deleteajax',['id_bank' => $bank['id_bank']])';
             url +="/"+idline;
             let resultAjax = SendToAjax(url,'DELETE');
             console.log(resultAjax);
@@ -302,7 +282,7 @@
 
             let idline = $(this).data('idline');
             $("#id_line").val(idline);
-            let url= '{{ route('linebanks.noduplicateajax',['id_bank' => $bank['id_bank']]) }}';
+            //let url= 'route('linebanks.noduplicateajax',['id_bank' => $bank['id_bank']])';
             url +="/"+idline;
             let resultAjax = SendToAjax(url,'PUT');
             //alert(resultAjax);
@@ -317,13 +297,6 @@
             }
         });
 
-
-        $(document).on('click', 'a.divdetail_row', function (e) {
-            unSelectAll();
-            let idline = $(this).data('idline');
-            $("input[type=checkbox][value=" + idline + "]").prop("checked",true);
-            divlineditels();
-        });
         $(document).on('click', 'a.detail_row', function (e) {
 
         });
@@ -370,7 +343,7 @@
             dataObj = {};
             dataObj['idline']= $("#statos").val();
 
-            let url= '{{ route('linebanks.showrowdetils',$bank['id_bank']) }}';
+            //let url= ' route('linebanks.showrowdetils',$bank['id_bank']) ';
             url +="/"+idline;
             //alert(url);
             let resultAjax = SendToAjax(url,'GET','-1');
@@ -400,7 +373,7 @@
                     var counterSave=0;
                     for (let i=0;i<selectbox.length;i++) {
                         var idline_aj = $(selectbox[i]).val();
-                        let url= '{{ route('linedetail.storemultirowajax',$bank['id_bank']) }}';
+                        //let url= ' route('linedetail.storemultirowajax',$bank['id_bank'])  ';
                         url +="/"+idline_aj;
                         let resultAjax = SendToAjax(url,'POST',null,dataObj);
                         //console.log(resultAjax);

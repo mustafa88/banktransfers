@@ -47,6 +47,10 @@ class Projects extends Model
         return $this->hasMany(Campaigns::class,'id_proj','id');
     }
 
+    public function donateworth(){
+        return $this->hasMany(Donateworth::class,'id_enter','id');
+    }
+
 
 
 }

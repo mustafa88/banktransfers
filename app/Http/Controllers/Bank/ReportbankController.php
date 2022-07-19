@@ -133,7 +133,7 @@ class ReportbankController extends Controller
             $r13_in = $this->report13($id_bank ,$fromDate ,$toDate ,'2');
             $reports[] = 'r13_in';
 
-            //return $r10_out;
+            //return $r5_in;
         }else{
             $requset->fdate =  date('Y-01-01');
             $requset->tdate =  date('Y-12-31') ;
@@ -352,7 +352,7 @@ class ReportbankController extends Controller
 
         $result = $result->get();
 
-        return $result;
+        return json_decode(json_encode($result->toArray()), true);
     }
 
     function report6($id_bank ,$fromDate ,$toDate ,$type=0){
@@ -399,8 +399,8 @@ class ReportbankController extends Controller
         }
 
         $result = $result->get();
-
-        return $result;
+        return json_decode(json_encode($result->toArray()), true);
+        //return $result;
     }
 
 
@@ -550,7 +550,7 @@ class ReportbankController extends Controller
 
         $result = $result->get();
 
-        return $result;
+        return json_decode(json_encode($result->toArray()), true);
     }
 
     function report10($id_bank ,$fromDate ,$toDate ,$type=0){
@@ -612,7 +612,7 @@ class ReportbankController extends Controller
 
         $result = $result->get();
 
-        return $result;
+        return json_decode(json_encode($result->toArray()), true);
     }
 
 
@@ -669,7 +669,7 @@ class ReportbankController extends Controller
 
         $result = $result->get();
 
-        return $result;
+        return json_decode(json_encode($result->toArray()), true);
     }
 
     function report12($id_bank ,$fromDate ,$toDate ,$type=0){
@@ -729,7 +729,7 @@ class ReportbankController extends Controller
 
         $result = $result->get();
 
-        return $result;
+        return json_decode(json_encode($result->toArray()), true);
     }
 
     function report13($id_bank ,$fromDate ,$toDate ,$type=0){
@@ -788,6 +788,6 @@ class ReportbankController extends Controller
 
         $result = $result->get();
 
-        return $result;
+        return json_decode(json_encode($result->toArray()), true);
     }
 }
