@@ -9,7 +9,7 @@ class Banksline extends Model
 {
     use HasFactory;
     protected  $table = 'banksline';
-    protected $fillable = ['id_line','id_bank','datemovement','datevalue','description','note','asmcta','amountmandatory','amountright','id_titletwo','id_enter','duplicate','done','created_at','updated_at'];
+    protected $fillable = ['id_line','id_bank','datemovement','datevalue','description','nobank','note','asmcta','amountmandatory','amountright','id_titletwo','id_enter','duplicate','done','uploadcsv_at','created_at','updated_at'];
     protected $hidden = ['created_at','updated_at'];
     protected $primaryKey = 'id_line';
     //public $timestamps = true;

@@ -57,9 +57,11 @@
                         <li class="sidebar-subnav-header">בנקים</li>
                         <li class=" "><a href="{{route('banks.show')}}" title="قائمة البنوك"><span>قائمة البنوك</span></a></li>
 
-                        {{--
-                        <li class=" "><a href="{{route('linebanks.show')}}" title="תנועות בחשבון"><span>תנועות בחשבון</span></a></li>
-                        --}}
+                        <li class=" "><a href="{{route('banks.mainDonate')}}" title="תרומה בשווה"><span>תרומה בשווה</span></a></li>
+
+
+                        <li class=" "><a href="{{route('banks.mainLoadCsv')}}" title="העלאת קובץ אקסל"><span>העלאת קובץ אקסל</span></a></li>
+
 
                         <li class=" "><a href="#bankmoves" title="תנועות בחשבון" data-toggle="collapse"><em class="fas fa-angle-left"></em><span>תנועות בחשבון</span></a>
 

@@ -60,7 +60,7 @@ class BankslineController extends Controller
         }
         $banksline =   $banksline->get();
         //return $banksline;
-        $bank = banks::find($id_bank);
+        $bank = banks::with(['enterprise', 'projects'])->find($id_bank);
         //return $bank;
         $enterprise = Enterprise::get();
         $title = Title_one::with(['titleTwo'])->get()->toArray();
@@ -102,8 +102,11 @@ class BankslineController extends Controller
             return response()->json($resultArr);
         }
 
-        $duplicate = $this->checkIfDuplicate($id_bank, 0, $requset->datemovement, $requset->asmcta, $requset->amountmandatory, $requset->amountright);
-
+        //$duplicate = $this->checkIfDuplicate($id_bank, 0, $requset->datemovement, $requset->asmcta, $requset->amountmandatory, $requset->amountright);
+        $nobank =0;
+        if((isset($requset->nobank) and $requset->nobank=='1')){
+             $nobank = 1;
+        }
         $arrDate = [
             'id_bank' => $id_bank,
             'datemovement' => $requset->datemovement,//תארך תנועה
@@ -115,22 +118,32 @@ class BankslineController extends Controller
             'amountright' => $requset->amountright,
             'id_titletwo' => $requset->id_titletwo,
             'id_enter' => $requset->id_enter,
-            'duplicate' => $duplicate,
+            'duplicate' => 0,
+            'nobank' => $nobank,
             'done' => 0,
         ];
 
         $rowinsert = Banksline::create($arrDate);
 
+        $this->checkIfDuplicateLine($rowinsert);
+
         $this->checkFixLine($rowinsert->id_line);
 
-        $daterow = Banksline::with(['banks', 'titletwo', 'enterprise'])->where('id_bank', '=', $id_bank)->find($rowinsert->id_line);
+        $rowBanksLine = Banksline::with(['banks', 'titletwo', 'enterprise'])->where('id_bank', '=', $id_bank)->find($rowinsert->id_line);
         //::where('color_id', '=', $color_id)->first();
         //return redirect()->action([BanksController::class ,'showTable']);
         //return redirect()->back()->with("success", "تم الحفظ بنجاح");
+
+
+        $rowHtml = view('layout.includes.linedetail_displayrowl',compact('rowBanksLine'))->render();
+        $rowHtml = trim(preg_replace('/\s\s+/', ' ', $rowHtml));
+
         $resultArr['status'] = true;
         $resultArr['cls'] = 'success';
         $resultArr['msg'] = 'تم الحفظ بنجاح';
-        $resultArr['row'] = $daterow;
+        $resultArr['row'] = $rowBanksLine;
+
+        $resultArr['rowHtml'] = $rowHtml;
         return response()->json($resultArr);
     }
 
@@ -142,7 +155,7 @@ class BankslineController extends Controller
      * @param $amountmandatory חובה
      * @param $amountright זכות
      * @return int =1 אם השורה כפול
-     */
+
     public function checkIfDuplicate($id_bank, $id_line, $datemovement, $asmcta, $amountmandatory, $amountright)
     {
         //בדיקת אם השורה כפול
@@ -163,6 +176,9 @@ class BankslineController extends Controller
         }
         return $duplicate;
     }
+     */
+
+
 
     public function updateAjax(BankslineRequset $requset, $id_bank, $id_line)
     {
@@ -174,15 +190,14 @@ class BankslineController extends Controller
             $resultArr['msg'] = 'תקלה - שורה לא קיימת';
             return response()->json($resultArr);
         }
-        $duplicate = $this->checkIfDuplicate($id_bank, $id_line, $requset->datemovement, $requset->asmcta, $requset->amountmandatory, $requset->amountright);
+        //$duplicate = $this->checkIfDuplicate($id_bank, $id_line, $requset->datemovement, $requset->asmcta, $requset->amountmandatory, $requset->amountright);
 
         $done = 0;
-        /**
-         * צריך להמשיך ולבדוק את הערך done - אם שווה ל1
-         * לפי השורות של הפקודה לאחר השלמת התוכנה
-         */
 
-        //המשך עדכון ...................
+        $nobank =0;
+        if((isset($requset->nobank) and $requset->nobank=='1')){
+            $nobank = 1;
+        }
 
         $daterow->datemovement = $requset->datemovement;
         $daterow->datevalue = $requset->datemovement;
@@ -193,21 +208,42 @@ class BankslineController extends Controller
         $daterow->amountright = $requset->amountright;
         $daterow->id_titletwo = $requset->id_titletwo;
         $daterow->id_enter = $requset->id_enter;
-        $daterow->duplicate = $duplicate;
+        $daterow->duplicate = 0;
+        $daterow->nobank = $nobank;
         $daterow->done = $done;
 
         $daterow->save();
 
-        $daterow = Banksline::with(['banks', 'titletwo', 'enterprise'])->where('id_bank', '=', $id_bank)->find($id_line);
+        $rowBanksLine = Banksline::with(['banks', 'titletwo', 'enterprise'])->where('id_bank', '=', $id_bank)->find($id_line);
+
+        $this->checkIfDuplicateLine($rowBanksLine);
         $this->checkFixLine($id_line);
+
+        $rowHtml = view('layout.includes.linedetail_displayrowl',compact('rowBanksLine'))->render();
+        $rowHtml = trim(preg_replace('/\s\s+/', ' ', $rowHtml));
+        $rowHtml = substr($rowHtml,8);
+        $rowHtml = substr($rowHtml,0,-10);
+        //<tr><td>
+        //</td></tr>
+        $rowHtml = explode("</td> <td>",$rowHtml);
+
+
         $resultArr['status'] = true;
         $resultArr['cls'] = 'success';
         $resultArr['msg'] = 'تم التعديل بنجاح';
-        $resultArr['row'] = $daterow;
+        $resultArr['row'] = $rowBanksLine;
+        $resultArr['rowHtml'] = $rowHtml;
+
         return response()->json($resultArr);
 
     }
 
+    /**
+     * @param $id_bank
+     * @param $id_line
+     * @return \Illuminate\Http\JsonResponse
+     * מחיקת שורה
+     */
     public function deleteAjax($id_bank, $id_line)
     {
         $daterow = Banksline::with(['banks', 'titletwo', 'enterprise'])->where('id_bank', '=', $id_bank)->find($id_line);
@@ -219,17 +255,50 @@ class BankslineController extends Controller
         }
 
         Banksdetail::where('id_line','=',$id_line)->delete();
-        //$bankslin->delete();
 
         $daterow->delete();
+
+        //$this->checkFixLine($id_line);
+
         $resultArr['status'] = true;
         $resultArr['cls'] = 'success';
         $resultArr['msg'] = 'تم الحذف بنجاح';
-        //$resultArr['row'] =$daterow;
         return response()->json($resultArr);
 
     }
 
+    /**
+     * @param $id_bank
+     * @param $id_line
+     * אישור שורה לא כפולה
+     */
+    public function noduplicateAjax($id_bank, $id_line)
+    {
+        $daterow = Banksline::where('id_bank', '=', $id_bank)->find($id_line);
+        if (!$daterow) {
+            $resultArr['status'] = false;
+            $resultArr['cls'] = 'error';
+            $resultArr['msg'] = 'תקלה - שורה לא קיימת';
+            return response()->json($resultArr);
+        }
+
+        $daterow->duplicate = 0;
+        $daterow->save();
+
+        $resultArr['status'] = true;
+        $resultArr['cls'] = 'success';
+        $resultArr['msg'] = 'נשמר בהצלחה';
+        return response()->json($resultArr);
+
+    }
+
+
+    /**
+     * @param Request $requset
+     * @param $id_bank
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
+     * טעינת קובץ CSV לבנק
 
     public function  storeFileCsv(Request $requset, $id_bank)
     {
@@ -280,20 +349,20 @@ class BankslineController extends Controller
 
             //$dateformat = \DateTime::createFromFormat('d/m/y', $datemovement);
             if(substr($datemovement,2,1)=='.'){
-                if( strlen($datemovement)==10){
+                if( strlen($datemovement)==10 or strlen($datemovement)==9){
                     $dateformat = \DateTime::createFromFormat('d.m.Y', $datemovement);
                 }elseif (strlen($datemovement)==8){
                     $dateformat = \DateTime::createFromFormat('d.m.y', $datemovement);
                 }else{
-                    ddd('date format - error');
+                    ddd($datemovement .'date format - error');
                 }
             }elseif (substr($datemovement,2,1)=='/' ){
-                if( strlen($datemovement)==10){
+                if( strlen($datemovement)==10 or strlen($datemovement)==9){
                     $dateformat = \DateTime::createFromFormat('d/m/Y', $datemovement);
                 }elseif (strlen($datemovement)==8){
                     $dateformat = \DateTime::createFromFormat('d/m/y', $datemovement);
                 }else{
-                    ddd('date format - error');
+                    ddd($datemovement .' date format - error');
                 }
             }elseif (substr($datemovement,4,1)=='-' ){
                 if( strlen($datemovement)==10){
@@ -309,7 +378,7 @@ class BankslineController extends Controller
 
             $datemovement = $dateformat->format('Y-m-d');
 
-            $duplicate = $this->checkIfDuplicate($id_bank, 0, $datemovement, $asmcta, $amountmandatory, $amountright);
+            //$duplicate = $this->checkIfDuplicate($id_bank, 0, $datemovement, $asmcta, $amountmandatory, $amountright);
             //$duplicate = 0;
             $arrDate = [
                 'id_bank' => $id_bank,
@@ -319,11 +388,13 @@ class BankslineController extends Controller
                 'asmcta' => $asmcta,
                 'amountmandatory' => $amountmandatory,
                 'amountright' => $amountright,
-                'duplicate' => $duplicate,
+                'duplicate' => 0,
+                'nobank' => 0,
                 'done' => 0,
             ];
             //return $arrDate;
-            Banksline::create($arrDate);
+            $rowBanksLine = Banksline::create($arrDate);
+            $this->checkIfDuplicateLine($rowBanksLine);
             $counter++;
         }
         return redirect()->back()->with("success", "تم الحفظ بنجاح {$counter} سطر جديد");
@@ -340,7 +411,7 @@ class BankslineController extends Controller
             throw new \Exception('Invalid file extension', response()::HTTP_UNSUPPORTED_MEDIA_TYPE); //415 error
         }
     }
-
+*/
 
     public function storeSelect(Request $requset, $id_bank)
     {
@@ -350,6 +421,7 @@ class BankslineController extends Controller
             Banksline::where('id_bank', '=', $id_bank)
                 ->whereIn('id_line', $selectbox)
                 ->update(['id_titletwo' => $requset->idselect_titletwo]);
+
         }elseif ($requset->btn_saveenter){
             //עדכון גורף לעמותה
             Banksline::where('id_bank', '=', $id_bank)
@@ -358,6 +430,7 @@ class BankslineController extends Controller
         }else{
             //echo $selectbox[0];
             foreach ($selectbox as $v_id_line){
+                //חלוקה שווה לשורה בין כל הארגונים
                 $this->storeDivDetail($v_id_line);
             }
             //ddd($selectbox);
@@ -427,23 +500,7 @@ class BankslineController extends Controller
             }
             break;
         }
-        //ddd($projectCity);
-        $datapost = 'המשךךךךךךך';
 
-
-
-        /**
-        $sumInput = 0;
-        foreach ($datapost as $key => $value){
-            if(substr($key,0,4)=='dcom'){
-                $sumInput += $value;
-            }
-        }
-        if(round($sumInput - ($bankslin['amountmandatory'] + $bankslin['amountright']),2)!=0){
-            //$x = round($sumInput - ($bankslin['amountmandatory'] + $bankslin['amountright']),2);
-            return redirect()->back()->with("success", "שגיאה - סך הכל חלוקה לא שווה לסכום השורה");
-        }
-        **/
 
         $banksdetail = Banksdetail::where('id_line', '=', $id_line)->get();
         //return $banksdetail;

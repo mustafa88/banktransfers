@@ -15,6 +15,7 @@ use App\Http\Controllers\bank\BanksdetailController;
 use App\Http\Controllers\bank\ReportbankController;
 use App\Http\Controllers\Bank\CampaignsController;
 use App\Http\Controllers\Bank\ReportProjectController;
+use App\Http\Controllers\Bank\DonateworthController;
     /*middleware
     |--------------------------------------------------------------------------
     | Web Routes
@@ -155,6 +156,20 @@ Route::group(['prefix' => 'managebanks/listbanks', 'namespace' => 'Bank', 'middl
     Route::post('store/{id_bank}', [BanksController::class, 'store'])->name('banks.store');
 });
 
+Route::group(['prefix' => 'managebanks/csvbanks', 'namespace' => 'Bank', 'middleware' => ['web']], function () {
+    //מסך ראשי להעלאה קובץ CSV לבנק
+    Route::get('storecsv', [BanksController::class, 'mainLoadCsv'])->name('banks.mainLoadCsv');
+
+    //העלאת קובץ CSV
+    Route::post('storecsv', [BanksController::class, 'storeFileCsv'])->name('banks.storeFileCsv');
+});
+
+Route::group(['prefix' => 'donate', 'namespace' => 'Bank', 'middleware' => ['web']], function () {
+    //מסך ראשי - תרומה בשווה
+    Route::get('maindonate', [DonateworthController::class,'mainDonate'])->name('banks.mainDonate');
+});
+
+
 Route::group(['prefix' => 'managebanks/linebanks', 'namespace' => 'Bank', 'middleware' => ['web']], function () {
     //תנועות בחשבון - שורות בנק
     //managebanks/linebanks/show
@@ -166,8 +181,12 @@ Route::group(['prefix' => 'managebanks/linebanks', 'namespace' => 'Bank', 'middl
     Route::put('store/{id_bank}/{id_line?}', [BankslineController::class, 'updateAjax'])->name('linebanks.updateajax');
     //מחיקת שורה
     Route::delete('delete/{id_bank}/{id_line?}', [BankslineController::class, 'deleteAjax'])->name('linebanks.deleteajax');
+    //סימון שורה לא כפולה
+    Route::put('noduplicate/{id_bank}/{id_line?}', [BankslineController::class, 'noduplicateAjax'])->name('linebanks.noduplicateajax');
+
+    //צריך להוריד אם עוברים לשיטיה החדשה - דף ספיציפי להעלאה מסמך CSV
     //העלאת קובץ CSV
-    Route::post('storecsv/{id_bank}', [BankslineController::class, 'storeFileCsv'])->name('linebanks.storeFileCsv');
+    //Route::post('storecsv/{id_bank}', [BankslineController::class, 'storeFileCsv'])->name('linebanks.storeFileCsv');
 
     //עדכון גורף לסוג תנועה או עמותה
     Route::post('updateselect/{id_bank}', [BankslineController::class, 'storeSelect'])->name('linebanks.storeselecttitle');

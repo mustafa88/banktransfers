@@ -10,63 +10,21 @@
 @section('page-content')
 
     @if($errors->any())
-        {!! implode('', $errors->all('<div>:message</div>')) !!}
+        {!! implode('', $errors->all('<div class="alert alert-danger" role="alert">:message</div>')) !!}
     @endif
-    <div class="card card-default">
-        <div class="card-header">ادخال/تعديل معلومات حساب البنك</div>
-        <div class="card-body">
-            <form method="post" action="{{route('banks.store',$bankedt['id_bank'] ?? '0')}}">
-                @csrf
-                <div class="form-row align-items-center">
-                    <div class="col-auto">
-                        <label  for="banknumber">رقم البنك</label>
-                        <input class="form-control mb-2" name="banknumber" id="banknumber" type="number" value="{{ $bankedt['banknumber'] ?? '' }}">
-                    </div>
-
-                    <div class="col-auto">
-                        <label  for="bankbranch">رقم الفرع</label>
-                        <input class="form-control mb-2" name='bankbranch' id="bankbranch" type="number" value="{{ $bankedt['bankbranch'] ?? '' }}">
-                    </div>
-                    <div class="col-auto">
-                        <label  for="bankaccount">رقم الحساب</label>
-                        <input class="form-control mb-2" name='bankaccount' id="bankaccount" type="number" value="{{ $bankedt['bankaccount'] ?? '' }}">
-                    </div>
-
-                    <div class="col-auto">
-
-
-                        <label  for="id_enterproj">مؤسسة/مشروع</label>
-                        <select class="custom-select custom-select-sm" name="id_enterproj" id="id_enterproj">
-                            <option value="0">اختار</option>
-                            @foreach($enterprise as $item)
-                                <option value="{{$item['id']}}*0"
-                                        @if(isset($bankedt['id_enter'])  and $bankedt['id_enter'].'*0'==$item['id'].'*0'  )
-                                        selected
-                                        @endif
-                                        style="font-weight: bold;"><b>{{$item['name']}}</b></option>
-                                @if(isset($item['project']))
-                                    @foreach($item['project'] as $item2)
-                                        <option value="{{$item['id']}}*{{$item2['id']}}"
-                                                @if(isset($bankedt['id_enter'])  and $bankedt['id_enter'].'*'.$bankedt['id_proj']==$item['id'].'*'.$item2['id']  )
-                                                selected
-                                            @endif
-                                        >&nbsp;&nbsp;&nbsp;&nbsp;{{$item['name']}} => {{$item2['name']}}</option>
-                                    @endforeach
-                                @endif
-
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="col-auto"><button class="btn btn-primary mb-2" type="submit">حفظ</button></div>
+    @if (Session::has('success'))
+        <div>
+                <div class="row">
+                    <div class="alert alert-success" role="alert"><strong>{{ Session::get('success') }}</strong></div>
                 </div>
-            </form>
         </div>
-    </div>
+    @endif
 
     <div class="row">
+        <form method="post" enctype="multipart/form-data" action="{{route('banks.storeFileCsv')}}">
+
         <div class="card card-default">
-            <div class="card-header">Bordered Table</div>
+            <div class="card-header">اختيار بنك</div>
             <div class="card-body">
                 <div class="table-responsive table-bordered">
                     <table class="table">
@@ -91,7 +49,11 @@
                                 <td>{{ $item['enterprise']['name'] }}</td>
                                 <td>{{ $item['projects']['name'] ?? '' }}</td>
                                 <td>
-                                    <a class="mb-1 btn-xs btn btn-outline-primary" href="{{route('banks.show',$item['id_bank'])}}" >تعديل</a>
+                                    <div class="form-check">
+                                        <input class="form-check-input" id="bank{{$item['id_bank']}}" type="radio"
+                                               name="numberbank" value="{{$item['id_bank']}}" >
+                                        <label class="form-check-label" for="bank{{$item['id_bank']}}">اختيار</label>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach
@@ -102,6 +64,27 @@
             </div>
         </div>
 
+        <div class="card card-default">
+            <div class="card-header">צרף קובץ</div>
+            <div class="card-body">
+
+                    @csrf
+                    <div class="form-row align-items-center">
+                        <div class="col-auto">
+                            <fieldset>
+                                <div class="form-group row"><label class="col-md-4 col-form-label">בחר קובץ</label>
+                                    <div class="col-md-10">
+                                        <input type="file" name="filecsv" id="filecsv" accept=".csv" class="form-control filestyle" data-classbutton="btn btn-secondary" data-classinput="form-control inline" data-icon="&lt;span class='fa fa-upload mr-2'&gt;&lt;/span&gt;">
+                                    </div>
+                                    <button class="btn btn-primary mb-2" type="submit" name="btn_savecsv" >حفظ</button>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+
+            </div>
+        </div>
+        </form>
     </div>
 
 
@@ -110,6 +93,8 @@
 
 @section('page-script')
     {{--  load file js from folder public --}}
+    <!-- FILESTYLE-->
+    <script src="{{ asset('angle/vendor/bootstrap-filestyle/src/bootstrap-filestyle.js') }}"></script><!-- TAGS INPUT-->
 @endsection
 
 {{-- @include( "scripts.managetable.enterprise" ) --}}

@@ -2,12 +2,12 @@
     <script type="text/javascript">
         let myTable,myRowTable=null;
         $(document).ready(function(){
-
             myTable = $('#datatable1').DataTable({
                 'paging': true, // Table pagination
                 'ordering': true, // Column ordering
                 "order": [[ 1, 'asc'],[ 0, 'asc']],
                 'info': true, // Bottom left status text
+                //fixedHeader: true,
                 responsive: true,
                 aLengthMenu: [
                     [25, 50, 100, 200, -1],
@@ -79,7 +79,8 @@
                 return false;
             }
              **/
-            //alert("aaa");
+
+            /**
             let dropmenu=`<div class="btn-group mb-1">
                                     <button class="btn dropdown-toggle btn-primary" type="button" data-toggle="dropdown"
                                             aria-expanded="false">בחר
@@ -93,6 +94,7 @@
                                 </div>
                                 <label class="c-checkbox"><input type="checkbox" name="selectbox[]" value="ID_LINE">
                                 <span class="fa fa-check"></span>סמן שורה</label>`;
+                  **/
             let id_line = $("#id_line").val();
 
             if((id_line=='0' && myRowTable!=null) || (id_line!='0' && myRowTable==null)){
@@ -108,7 +110,7 @@
 
                 let url= '{{ route('linebanks.storeajax',$bank['id_bank']) }}';
                 let resultAjax = SendToAjax(url,'POST');
-                //console.log(resultAjax);
+                console.log(resultAjax);
                 if(resultAjax==undefined){
                     notify('حدث خطأ','error');
                     return false;
@@ -117,15 +119,9 @@
                 if(resultAjax.status===false){
                     return;
                 }
-               //return;
-                let newData = resultAjax['row'];
+                myTable.row.add($(resultAjax['rowHtml'])[0]).draw();
                 /**
-                let done='לא';
-                if(newData.done==='1'){
-                    done='כן';
-                }
-                **/
-
+                let newData = resultAjax['row'];
                 let done='';
                 if(newData.duplicate==='1'){
                     done=`<span class="table-danger">שורה כפולה</span>`;
@@ -134,12 +130,8 @@
                 }else{
                     done=`<span class="table-warning">שורה לא תקינה</span>`;
                 }
-
                 let id_line = newData.id_line;
-
                 dropmenu = dropmenu.replaceAll("ID_LINE", id_line);
-                //const name = 'Chris';
-                //const greeting = `Hello, ${name}`;
 
                 let rowNode = myTable.row.add( [
                     newData.datemovement,
@@ -154,17 +146,15 @@
                     dropmenu,
                 ] ).draw().node();
                 //$( rowNode ).find('td').eq(1).css("direction",'ltr').css("background-color",newData.color_code);
+                **/
             }else{
                 //return;
                 //update
                 //notify('update');
-                {{--let url= '{{ route('color.update.ajax') }}';--}}
                 let url= '{{ route('linebanks.updateajax',['id_bank' => $bank['id_bank']]) }}';
-                //alert(url);alert(id_line);
                 url +="/"+id_line;
-                //alert(url); return;
                 let resultAjax = SendToAjax(url,'PUT');
-                //console.log(resultAjax);
+                console.log(resultAjax);
                 if(resultAjax==undefined){
                     notify('حدث خطأ','error');
                     return false;
@@ -173,13 +163,15 @@
                 if(resultAjax.status===false){
                     return;
                 }
-                let newData = resultAjax['row'];
+
+                //'שינוי ערך שדה בטבלה'
+                let numberRow = myTable.row(myRowTable)[0][0];
+                let row = myTable.row(numberRow);
+                myTable.row(row).data(resultAjax['rowHtml']).draw();
+
                 /**
-                let done='לא';
-                if(newData.done==='1'){
-                    done='כן';
-                }
-                **/
+                let newData = resultAjax['row'];
+
                 let done='';
                 if(newData.duplicate==='1'){
                     done=`<span class="table-danger">שורה כפולה</span>`;
@@ -194,7 +186,7 @@
                 dropmenu = dropmenu.replaceAll("ID_LINE", id_linerow);
                 //'שינוי ערך שדה בטבלה'
                 let numberRow = myTable.row(myRowTable)[0][0];
-                console.log(newData);
+                //console.log(newData);
                 let row = myTable.row(numberRow);
                 myTable.cell(row, 0).data(newData.datemovement);
                 myTable.cell(row, 1).data(newData.description);
@@ -210,7 +202,7 @@
 
                 //let thisRow = row.node();
                 //$(thisRow).find('td').eq(1).css("background-color",newData['color_code']);
-
+                **/
 
             }
 
@@ -307,9 +299,31 @@
             if(r===false){
                 return false;
             }
-            alert("צריך להמשיך פעולה....");
+
+            let idline = $(this).data('idline');
+            $("#id_line").val(idline);
+            let url= '{{ route('linebanks.noduplicateajax',['id_bank' => $bank['id_bank']]) }}';
+            url +="/"+idline;
+            let resultAjax = SendToAjax(url,'PUT');
+            //alert(resultAjax);
+            console.log(resultAjax);
+            if(resultAjax==undefined){
+                notify('حدث خطأ','error');
+                return false;
+            }
+            notify(resultAjax.msg ,resultAjax.cls);
+            if(resultAjax.status===false){
+                return;
+            }
         });
 
+
+        $(document).on('click', 'a.divdetail_row', function (e) {
+            unSelectAll();
+            let idline = $(this).data('idline');
+            $("input[type=checkbox][value=" + idline + "]").prop("checked",true);
+            divlineditels();
+        });
         $(document).on('click', 'a.detail_row', function (e) {
 
         });

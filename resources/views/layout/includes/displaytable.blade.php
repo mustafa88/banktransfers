@@ -1,111 +1,65 @@
-@if(isset($bankslin))
-    <input type="hidden" name="help_idlinebank" id="help_idlinebank" value="{{$bankslin['id_line']}}" >
+@if(isset($tableHead) and isset($tableBody))
 <table class="table">
     <thead>
     <tr>
-        <th>סכום @if($bankslin['amountmandatory']=='0')זכות@elseחובה@endif</th>
-        <th>פרויטק</th>
-        <th>עיר</th>
-        <th>סוג @if($bankslin['amountmandatory']=='0')זכות@elseחובה@endif</th>
-        <th>קמפיין</th>
-        <th>הערה</th>
+        @foreach($tableHead as $item)
+            <th>{{$item}}</th>
+        @endforeach
     </tr>
     </thead>
-    <tr>
-        <td>
-            <input type="number" name="scome"  id="scome" value=""
-                   class="form-control mb-2 inptrowdetl" @if(isset($fullscome)) readonly @endif >
-            @if(isset($fullscome)) ירשם סכום מלא  @endif
-        </td>
+    <tbody>
+    @foreach($tableBody as $row)
+        <tr>
+@if(isset($tableKeyBody))
+{{-- מדפיס רק ערכים שרשומין במערך --}}
+                @foreach($tableKeyBody as $item)
+                    {{-- אם הערך מתוך מערך ממערך לדוגמא  $item['key1']['key2']--}}
+                    {{-- נשלח בצורה הזו key1.key2 --}}
+                    @if (strpos($item, '.') !== false)
+                        @php
 
-        <td>
-            <select name="proj" id="proj"
-                    class="form-control mb-2 custom-select custom-select-sm select-project inptrowdetl"   >
-                <option value="0">בחר</option>
-                @foreach($bankslin['enterprise']['project'] as $item)
-                    <option value="{{$item['id']}}" >{{$item['name']}} </option>
+                            if(!empty($row)){
+                                $val_item =$row;
+                            }
+                        @endphp
+                        @foreach(explode('.', $item) as $info)
+
+                            @php
+                                if(!empty($val_item) and !empty($info)){
+                                    $val_item = $val_item[$info];
+                                }
+                            @endphp
+                        @endforeach
+                    @else
+                        @php
+                            if(!empty($row) and !empty($item)){
+                               $val_item = $row[$item];
+                           }
+                        @endphp
+
+                    @endif
+                    <td>
+                        @if(is_numeric($val_item)){{ number_format($val_item,2) }}@else {{$val_item}} @endif
+                    </td>
                 @endforeach
-            </select>
-        </td>
-        <td>
-            <select name="city" id="city" class="form-control mb-2 custom-select custom-select-sm inptrowdetl"   >
-                <option value="0">בחר</option>
-            </select>
-        </td>
+@else
+{{-- מדפיס כל הערכים --}}
+                @foreach($row as $k=>$item)
+                    <td>
+                        @if(is_numeric($item)){{ number_format($item,2) }}@else {{$item}} @endif
+                             </td>
+                @endforeach
 
-        <td>
-            <select name="incmexpe" id="incmexpe" class="form-control mb-2 custom-select custom-select-sm inptrowdetl"   >
-                <option value="0">בחר</option>
-            </select>
-        </td>
+@endif
 
-        <td>
-            <select name="id_campn" id="id_campn" class="form-control mb-2 custom-select custom-select-sm inptrowdetl"   >
-                <option value="0">בחר</option>
-            </select>
-        </td>
 
-        <td><input type="text" name="note" id="note" class="form-control mb-2 inptrowdetl" value=""></td>
-        @if(!isset($fullscome))
-            <td><button class="btn btn-primary mb-2" type="button" name="btn_save" id="btn_save">حفظ</button></td>
-        @endif
-
-    </tr>
+</tr>
+@endforeach
+</tbody>
 </table>
 @endif
 
-@push('linedetailedit-script')
+@push('displaytable-script')
 <script>
-    $(document).on('change', '.select-project', function (e) {
-
-        $("#city" ).find('option').remove();
-        $("#incmexpe" ).find('option').remove();
-        $("#id_campn" ).find('option').remove();
-
-        var sum_mandatory = $("#sum_mandatory").text();
-        var sum_right = $("#sum_right").text();
-        let url= '{{ route('autocomplate.city.income.expense') }}';
-        dataObj = {};
-        dataObj['id_proj']= $(this).val();
-
-        dataObj['id_line_bank']= $("#help_idlinebank").val();
-        let resultAjax = SendToAjax(url,'POST',null,dataObj);
-        //console.log(resultAjax);
-
-        city = resultAjax['row']['city'];
-        $("#city").append(`<option value="0">בחר</option>`);
-        $.each( city, function( key, value ) {
-            //alert( key + ": " + value );
-            $("#city").append(`<option value="${value["city_id"]}">${value["city_name"]}</option>`);
-        });
-
-        let tmpatt;
-        /**
-        if(sum_mandatory==""){
-
-            tmpatt = resultAjax['row']['income'];
-        }else{
-
-            tmpatt = resultAjax['row']['expense'];
-        }
-        **/
-        if(resultAjax['typeselect']=="expense"){
-            tmpatt = resultAjax['row']['expense'];
-        }else{
-            tmpatt = resultAjax['row']['income'];
-        }
-
-        $("#incmexpe").append(`<option value="0">בחר</option>`);
-        $.each( tmpatt, function( key, value ) {
-            $("#incmexpe" ).append(`<option value="${value["id"]}">${value["name"]}</option>`);
-        });
-
-
-        campn = resultAjax['row']['campaigns'];
-        $("#id_campn").append(`<option value="0">בחר</option>`);
-        $.each( campn, function( key, value ) {
-            $("#id_campn").append(`<option value="${value["id"]}">${value["name_camp"]}</option>`);
-        });
-    });
 </script>
 @endpush

@@ -73,33 +73,17 @@
         </div>
     </div>
 
+
+
     @if(isset($r1))
         <div class="row">
             <div class="card card-default">
                 <div class="card-header">Bordered Table</div>
                 <div class="card-body">
                     <div class="table-responsive table-bordered">
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th>עמותה</th>
-                                <th>חובה</th>
-                                <th>זכות</th>
-                                <th>נטו</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($r1 as $item)
-                                <tr>
-                                    <td>{{ $item['enterp'] }}</td>
-                                    <td>{{ number_format($item['amountmandatory'],2) }}</td>
-                                    <td>{{ number_format($item['amountright'],2) }}</td>
-                                    <td>{{ number_format($item['total_neto'],2) }}</td>
-                                </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
-
+                        @include('layout.includes.displaytable',
+                        ['tableBody' => $r1,
+                         'tableHead' => array('עמותה','חובה','זכות','נטו')])
                     </div>
                 </div>
             </div>
@@ -112,29 +96,9 @@
                 <div class="card-header">Bordered Table</div>
                 <div class="card-body">
                     <div class="table-responsive table-bordered">
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th>עמותה</th>
-                                <th>פרויקט</th>
-                                <th>חובה</th>
-                                <th>זכות</th>
-                                <th>נטו</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($r2 as $item)
-                                <tr>
-                                    <td>{{ $item['enterp'] }}</td>
-                                    <td>{{ $item['proj'] }}</td>
-                                    <td>{{ number_format($item['amountmandatory'],2) }}</td>
-                                    <td>{{ number_format($item['amountright'],2) }}</td>
-                                    <td>{{ number_format($item['total_neto'],2) }}</td>
-                                </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
-
+                        @include('layout.includes.displaytable',
+                        ['tableBody' => $r2,
+                         'tableHead' => array('עמותה','פרויקט','חובה','זכות','נטו')])
                     </div>
                 </div>
             </div>
@@ -147,30 +111,9 @@
                 <div class="card-header">Bordered Table</div>
                 <div class="card-body">
                     <div class="table-responsive table-bordered">
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th>עמותה</th>
-                                <th>פרויקט</th>
-                                <th>עיר</th>
-                                <th>חובה</th>
-                                <th>זכות</th>
-                                <th>נטו</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($r3 as $item)
-                                <tr>
-                                    <td>{{ $item['enterp'] }}</td>
-                                    <td>{{ $item['proj'] }}</td>
-                                    <td>{{ $item['city_name'] }}</td>
-                                    <td>{{ number_format($item['amountmandatory'],2) }}</td>
-                                    <td>{{ number_format($item['amountright'],2) }}</td>
-                                    <td>{{ number_format($item['total_neto'],2) }}</td>
-                                </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
+                        @include('layout.includes.displaytable',
+                        ['tableBody' => $r3,
+                         'tableHead' => array('עמותה','פרויקט','עיר','חובה','זכות','נטו')])
 
                     </div>
                 </div>
@@ -194,29 +137,10 @@
                             <div class="card-header">Bordered Table</div>
                             <div class="card-body">
                                 <div class="table-responsive table-bordered">
-                                    <table class="table">
-                                        <thead>
-                                        <tr>
-                                            <th>עמותה</th>
-                                            <th>פרויקט</th>
-                                            <th>עיר</th>
-                                            <th>תנועה</th>
-                                            <th>זכות</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        @foreach($r4_in as $item)
-                                            <tr>
-                                                <td>{{ $item['enterp'] }}</td>
-                                                <td>{{ $item['proj'] }}</td>
-                                                <td>{{ $item['city_name'] }}</td>
-                                                <td>{{ $item['ttwo_text'] }}</td>
-                                                <td>{{ number_format($item['amountright'],2) }}</td>
-                                            </tr>
-                                        @endforeach
-                                        </tbody>
-                                    </table>
-
+                                    @include('layout.includes.displaytable',
+                        ['tableBody' => $r4_in,
+                         'tableKeyBody' => array('enterp','proj','city_name','ttwo_text','amountright',),
+                         'tableHead' => array('עמותה','פרויקט','עיר','תנועה','זכות')])
                                 </div>
                             </div>
                         </div>
@@ -229,31 +153,10 @@
                             <div class="card-header">Bordered Table</div>
                             <div class="card-body">
                                 <div class="table-responsive table-bordered">
-                                    <table class="table">
-                                        <thead>
-                                        <tr>
-                                            <th>עמותה</th>
-                                            <th>פרויקט</th>
-                                            <th>עיר</th>
-                                            <th>תנועה</th>
-                                            <th>סוג זכות</th>
-                                            <th>זכות</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        @foreach($r5_in as $item)
-                                            <tr>
-                                                <td>{{ $item['enterp'] }}</td>
-                                                <td>{{ $item['proj'] }}</td>
-                                                <td>{{ $item['city_name'] }}</td>
-                                                <td>{{ $item['ttwo_text'] }}</td>
-                                                <td>{{ $item['incomename'] }}</td>
-                                                <td>{{ number_format($item['amountright'],2) }}</td>
-                                            </tr>
-                                        @endforeach
-                                        </tbody>
-                                    </table>
-
+                                    @include('layout.includes.displaytable',
+                       ['tableBody' => $r5_in,
+                        'tableKeyBody' => array('enterp','proj','city_name','ttwo_text','incomename','amountright',),
+                        'tableHead' => array('עמותה','פרויקט','עיר','תנועה','סוג זכות','זכות')])
                                 </div>
                             </div>
                         </div>
@@ -266,32 +169,10 @@
                             <div class="card-header">Bordered Table</div>
                             <div class="card-body">
                                 <div class="table-responsive table-bordered">
-                                    <table class="table">
-                                        <thead>
-                                        <tr>
-                                            <th>עמותה</th>
-                                            <th>פרויקט</th>
-                                            <th>עיר</th>
-                                            <th>תנועה</th>
-                                            <th>סוג זכות</th>
-                                            <th>חודש</th>
-                                            <th>זכות</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        @foreach($r6_in as $item)
-                                            <tr>
-                                                <td>{{ $item['enterp'] }}</td>
-                                                <td>{{ $item['proj'] }}</td>
-                                                <td>{{ $item['city_name'] }}</td>
-                                                <td>{{ $item['ttwo_text'] }}</td>
-                                                <td>{{ $item['incomename'] }}</td>
-                                                <td>{{ $item['month_year'] }}</td>
-                                                <td>{{ number_format($item['amountright'],2) }}</td>
-                                            </tr>
-                                        @endforeach
-                                        </tbody>
-                                    </table>
+                                    @include('layout.includes.displaytable',
+                       ['tableBody' => $r6_in,
+                        'tableKeyBody' => array('enterp','proj','city_name','ttwo_text','month_year','amountright',),
+                        'tableHead' => array('עמותה','פרויקט','עיר','תנועה','חודש','זכות')])
 
                                 </div>
                             </div>
@@ -305,30 +186,11 @@
                             <div class="card-header">Bordered Table</div>
                             <div class="card-body">
                                 <div class="table-responsive table-bordered">
-                                    <table class="table">
-                                        <thead>
-                                        <tr>
-                                            <th>עמותה</th>
-                                            <th>פרויקט</th>
-                                            <th>עיר</th>
-                                            <th>קמפיין</th>
-                                            <th>זכות</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        @foreach($r7_in as $item)
-                                            <tr>
-                                                <td>{{ $item['enterp'] }}</td>
-                                                <td>{{ $item['proj'] }}</td>
-                                                <td>{{ $item['city_name'] }}</td>
-                                                <td>{{ $item['name_camp'] }}</td>
-                                                <td>{{ number_format($item['amountright'],2) }}</td>
-                                            </tr>
-                                        @endforeach
-                                        </tbody>
-                                    </table>
-
-                                </div>
+                                    @include('layout.includes.displaytable',
+                       ['tableBody' => $r7_in,
+                        'tableKeyBody' => array('enterp','proj','city_name','name_camp','amountright',),
+                        'tableHead' => array('עמותה','פרויקט','עיר','קמפיין','זכות')])
+                                    </div>
                             </div>
                         </div>
                     </div>
@@ -343,29 +205,10 @@
                             <div class="card-header">Bordered Table</div>
                             <div class="card-body">
                                 <div class="table-responsive table-bordered">
-                                    <table class="table">
-                                        <thead>
-                                        <tr>
-                                            <th>עמותה</th>
-                                            <th>פרויקט</th>
-                                            <th>עיר</th>
-                                            <th>תנועה</th>
-                                            <th>חובה</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        @foreach($r4_out as $item)
-                                            <tr>
-                                                <td>{{ $item['enterp'] }}</td>
-                                                <td>{{ $item['proj'] }}</td>
-                                                <td>{{ $item['city_name'] }}</td>
-                                                <td>{{ $item['ttwo_text'] }}</td>
-                                                <td>{{ number_format($item['amountmandatory'],2) }}</td>
-                                            </tr>
-                                        @endforeach
-                                        </tbody>
-                                    </table>
-
+                                    @include('layout.includes.displaytable',
+                      ['tableBody' => $r4_out,
+                       'tableKeyBody' => array('enterp','proj','city_name','ttwo_text','amountmandatory',),
+                       'tableHead' => array('עמותה','פרויקט','עיר','תנועה','חובה')])
                                 </div>
                             </div>
                         </div>
@@ -378,31 +221,10 @@
                             <div class="card-header">Bordered Table</div>
                             <div class="card-body">
                                 <div class="table-responsive table-bordered">
-                                    <table class="table">
-                                        <thead>
-                                        <tr>
-                                            <th>עמותה</th>
-                                            <th>פרויקט</th>
-                                            <th>עיר</th>
-                                            <th>תנועה</th>
-                                            <th>סוג חובה</th>
-                                            <th>חובה</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        @foreach($r5_out as $item)
-                                            <tr>
-                                                <td>{{ $item['enterp'] }}</td>
-                                                <td>{{ $item['proj'] }}</td>
-                                                <td>{{ $item['city_name'] }}</td>
-                                                <td>{{ $item['ttwo_text'] }}</td>
-                                                <td>{{ $item['expensename'] }}</td>
-                                                <td>{{ number_format($item['amountmandatory'],2) }}</td>
-                                            </tr>
-                                        @endforeach
-                                        </tbody>
-                                    </table>
-
+                                    @include('layout.includes.displaytable',
+                      ['tableBody' => $r5_out,
+                       'tableKeyBody' => array('enterp','proj','city_name','ttwo_text','expensename','amountmandatory',),
+                       'tableHead' => array('עמותה','פרויקט','עיר','תנועה','סוג חובה','חובה')])
                                 </div>
                             </div>
                         </div>
@@ -415,33 +237,10 @@
                             <div class="card-header">Bordered Table</div>
                             <div class="card-body">
                                 <div class="table-responsive table-bordered">
-                                    <table class="table">
-                                        <thead>
-                                        <tr>
-                                            <th>עמותה</th>
-                                            <th>פרויקט</th>
-                                            <th>עיר</th>
-                                            <th>תנועה</th>
-                                            <th>סוג חובה</th>
-                                            <th>חודש</th>
-                                            <th>חובה</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        @foreach($r6_out as $item)
-                                            <tr>
-                                                <td>{{ $item['enterp'] }}</td>
-                                                <td>{{ $item['proj'] }}</td>
-                                                <td>{{ $item['city_name'] }}</td>
-                                                <td>{{ $item['ttwo_text'] }}</td>
-                                                <td>{{ $item['expensename'] }}</td>
-                                                <td>{{ $item['month_year'] }}</td>
-                                                <td>{{ number_format($item['amountmandatory'],2) }}</td>
-                                            </tr>
-                                        @endforeach
-                                        </tbody>
-                                    </table>
-
+                                    @include('layout.includes.displaytable',
+                      ['tableBody' => $r6_out,
+                       'tableKeyBody' => array('enterp','proj','city_name','ttwo_text','expensename','month_year','amountmandatory',),
+                       'tableHead' => array('עמותה','פרויקט','עיר','תנועה','סוג חובה','חודש','חובה')])
                                 </div>
                             </div>
                         </div>
@@ -454,28 +253,10 @@
                             <div class="card-header">Bordered Table</div>
                             <div class="card-body">
                                 <div class="table-responsive table-bordered">
-                                    <table class="table">
-                                        <thead>
-                                        <tr>
-                                            <th>עמותה</th>
-                                            <th>פרויקט</th>
-                                            <th>עיר</th>
-                                            <th>קמפיין</th>
-                                            <th>חובה</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        @foreach($r7_out as $item)
-                                            <tr>
-                                                <td>{{ $item['enterp'] }}</td>
-                                                <td>{{ $item['proj'] }}</td>
-                                                <td>{{ $item['city_name'] }}</td>
-                                                <td>{{ $item['name_camp'] }}</td>
-                                                <td>{{ number_format($item['amountmandatory'],2) }}</td>
-                                            </tr>
-                                        @endforeach
-                                        </tbody>
-                                    </table>
+                                    @include('layout.includes.displaytable',
+                      ['tableBody' => $r7_out,
+                       'tableKeyBody' => array('enterp','proj','city_name','name_camp','amountmandatory'),
+                       'tableHead' => array('עמותה','פרויקט','עיר','קמפיין','חובה')])
                                 </div>
                             </div>
                         </div>

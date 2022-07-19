@@ -18,9 +18,20 @@
     @if($errors->any())
         {!! implode('', $errors->all('<div>:message</div>')) !!}
     @endif
+    <div>
+        <h3>معطيات حساب بنك {{$bank['enterprise']['name']}} @if(!empty($bank['projects']['name'])) مشروع {{$bank['projects']['name']}} @endif</h3>
+    </div>
     <div class="card card-default">
-        <div class="card-header">הוספה/עריכה תנועה בנק</div>
-        <div class="card-body">
+        <div class="card-header">
+            <h4 class="card-title">
+                <a class="text-inherit" data-toggle="collapse" href="#addline" aria-expanded="true">
+                    <small><em class="fa fa-plus text-primary mr-2"></em></small>
+                    <span>הוספה/עריכה תנועה בנק</span>
+                </a>
+            </h4>
+
+        </div>
+        <div class="card-body collapse" id="addline">
             <form method="post" name="myform" id="myform" action="#">
                 @csrf
                 <div class="form-row align-items-center">
@@ -92,6 +103,12 @@
 
                         </select>
                     </div>
+                    <div class="col-auto">
+                            <label for="nobank">שורה לא בבנק</label>
+                            <input type="checkbox" name='nobank' id="nobank"  value="1"
+                                   class="form-control" @if(isset($bankedt) and $bankedt['nobank']=='1') checked @endif
+                            >
+                    </div>
 
 
                     <div class="col-auto">
@@ -116,7 +133,7 @@
             </div>
         </div>
     </div>
-
+   {{--
     <div class="card card-default">
         <div class="card-header">צרף קובץ</div>
         <div class="card-body">
@@ -137,6 +154,8 @@
             </form>
         </div>
     </div>
+    --}}
+
         <form method="post" action="{{route('linebanks.storeselecttitle',$bank['id_bank'])}}" id="formselct">
         @csrf
 
@@ -254,7 +273,7 @@
 
             </div>
             <div class="card-body">
-                <table class="table table-striped my-4 w-100" id="datatable1">
+                <table class="table table-striped my-4 w-100 hover" id="datatable1">
                     <thead>
                     <tr>
                         <th>תאריך תנועה</th>
@@ -262,6 +281,7 @@
                         <th>אסמכתא</th>
                         <th>חובה</th>
                         <th>זכות</th>
+                        <th>שורה בבנק</th>
                         <th>סוג תנועה</th>
                         <th>עמותה</th>
                         <th>הערה</th>
@@ -271,50 +291,7 @@
                     </thead>
                     <tbody>
                     @foreach($banksline as $item)
-                        <tr>
-                            <td>{{$item['datemovement']}}</td>
-                            <td>{{$item['description']}}</td>
-                            <td>{{$item['asmcta']}}</td>
-                            <td>{{$item['amountmandatory']}}</td>
-                            <td>{{$item['amountright']}}</td>
-                            <td>
-                                @if(!empty($item['titletwo']['ttwo_text']))
-                                    {{$item['titletwo']['ttwo_text']}}
-                                @endif
-                            </td>
-                            <td>
-                                @if(!empty($item['enterprise']['name']))
-                                    {{$item['enterprise']['name']}}
-                                @endif
-                            </td>
-                            <td>{{$item['note']}}</td>
-                            <td>
-                                <span class="@if($item['duplicate']==1) table-danger  @elseif($item['done']==1) table-success @else table-warning @endif">
-                                @if($item['duplicate']==1) שורה כפולה  @elseif($item['done']==1) שורה תקינה @else שורה לא תקינה @endif
-                                </span>
-                            </td>
-                            <td>
-                                <div class="btn-group mb-1">
-                                    <button class="btn dropdown-toggle btn-primary" type="button" data-toggle="dropdown"
-                                            aria-expanded="false">בחר
-                                    </button>
-                                    <div class="dropdown-menu dropmenu" role="menu" x-placement="bottom-start">
-                                        <a class="dropdown-item edit_row" href="javascript:void(0)" data-idline="{{$item['id_line']}}"><i class="far fa-edit"></i> עריכה</a>
-                                        <a class="dropdown-item delete_row" href="javascript:void(0)" data-idline="{{$item['id_line']}}"><i class="far fa-trash-alt"></i> מחיקה</a>
-                                        @if($item['duplicate']==1)
-                                            <a class="dropdown-item dulicate_row" href="javascript:void(0)" data-idline="{{$item['id_line']}}"><i class="far fa-check-circle"></i> אישור שורה</a>
-                                        @endif
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item detail_row" href="{{route('linedetail.show',$item['id_line'])}}" data-idline="{{$item['id_line']}}">עריכת פירוט שורה</a>
-                                    </div>
-                                </div>
-                                <label class="c-checkbox">
-                                    <input type="checkbox" name="selectbox[]" value="{{$item['id_line']}}"
-                                           data-titletwo="{{$item['id_titletwo']}}" data-done="{{$item['done']}}"
-                                    data-titletwo="{{$item['id_titletwo']}}">
-                                    <span class="fa fa-check"></span>סמן שורה</label>
-                            </td>
-                        </tr>
+                        @include('layout.includes.linedetail_displayrowl',['rowBanksLine' => $item])
                     @endforeach
 
                     </tbody>
