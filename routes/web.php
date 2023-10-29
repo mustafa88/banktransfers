@@ -227,8 +227,6 @@ Route::group(['prefix' => 'usb/report', 'namespace' => 'Usb', 'middleware' => ['
 
 
 
-
-
 Route::group(['prefix' => 'usb_income_entrep/{id_entrep}/{id_city}', 'namespace' => 'Usb', 'middleware' => ['web']], function () {
     //תיעוד הכנסות - USB - בחירת פרויקט
     Route::get('show', [UsbIncomeController::class ,'index_entrep'])->name('usb_income_entrep.show');
