@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Models\bank;
+namespace App\Models\Bank;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\bank\Banksline;
+use App\Models\Bank\Banksline;
 class Banksdetail extends Model
 {
     use HasFactory;

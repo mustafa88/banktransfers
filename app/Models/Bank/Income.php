@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Models\bank;
+namespace App\Models\Bank;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\bank\Projects;
+use App\Models\Bank\Projects;
 class Income extends Model
 {
     use HasFactory;

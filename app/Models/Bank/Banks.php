@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models\bank;
+namespace App\Models\Bank;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\bank\Enterprise;
-use App\Models\bank\Projects;
+use App\Models\Bank\Enterprise;
+use App\Models\Bank\Projects;
 class Banks extends Model
 {
     use HasFactory;

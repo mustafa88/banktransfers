@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models\bank;
+namespace App\Models\Bank;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\bank\Projects;
-use App\Models\bank\Banksdetail;
+use App\Models\Bank\Projects;
+use App\Models\Bank\Banksdetail;
 class City extends Model
 {
     use HasFactory;

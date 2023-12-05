@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Models\bank;
+namespace App\Models\Bank;
 
-use App\Models\bank\City;
-use App\Models\bank\Income;
+use App\Models\Bank\City;
+use App\Models\Bank\Income;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\bank\Enterprise;
-use App\Models\bank\Expense;
+use App\Models\Bank\Enterprise;
+use App\Models\Bank\Expense;
 use App\Models\Bank;
-use App\Models\bank\Banksdetail;
+use App\Models\Bank\Banksdetail;
 use App\Models\Bank\Campaigns;
 class Projects extends Model
 {
