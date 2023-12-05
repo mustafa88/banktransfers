@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\bank;
+namespace App\Http\Controllers\Bank;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\bank\CityRequset;
-use App\Models\bank\City;
+use App\Models\Bank\City;
 use Illuminate\Http\Request;
 
 class CityController extends Controller

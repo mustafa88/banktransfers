@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Bank;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Bank\DonateworthRequest;
-use App\Models\bank\Banksline;
+use App\Models\Bank\Banksline;
 use App\Models\bank\City;
 use App\Models\Bank\Donatetype;
 use App\Models\Bank\Donateworth;
-use App\Models\bank\Enterprise;
+use App\Models\Bank\Enterprise;
 use App\Traits\HelpersTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;

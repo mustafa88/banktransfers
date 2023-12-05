@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\bank;
+namespace App\Http\Controllers\Bank;
 
 use App\Http\Controllers\Controller;
-use App\Models\bank\Income;
-use App\Models\bank\Enterprise;
-use App\Models\bank\Projects;
-use App\Http\Requests\bank\IncomeRequset;
+use App\Models\Bank\Income;
+use App\Models\Bank\Enterprise;
+use App\Models\Bank\Projects;
+use App\Http\Requests\Bank\IncomeRequset;
 use Illuminate\Http\Request;
 
 class IncomeController extends Controller

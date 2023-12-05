@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\bank;
+namespace App\Http\Controllers\Bank;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\bank\EnterpriseRequset;
-use App\Models\bank\Enterprise;
+use App\Http\Requests\Bank\EnterpriseRequset;
+use App\Models\Bank\Enterprise;
 
 class EnterpriseController extends Controller
 {

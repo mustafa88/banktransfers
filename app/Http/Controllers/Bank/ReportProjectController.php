@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Bank;
 
 use App\Http\Controllers\Controller;
-use App\Models\bank\Banksline;
-use App\Models\bank\City;
-use App\Models\bank\Enterprise;
-use App\Models\bank\Projects;
+use App\Models\Bank\Banksline;
+use App\Models\Bank\City;
+use App\Models\Bank\Enterprise;
+use App\Models\Bank\Projects;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;

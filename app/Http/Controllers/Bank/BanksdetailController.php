@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\bank;
+namespace App\Http\Controllers\Bank;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\bank\BanksdetailRequset;
-use App\Models\bank\Banksdetail;
-use App\Models\bank\Banksline;
-use App\Models\bank\Expense;
+use App\Models\Bank\Banksdetail;
+use App\Models\Bank\Banksline;
+use App\Models\Bank\Expense;
 use App\Traits\BankslineTrait;
 use App\Traits\HelpersTrait;
 use Illuminate\Http\Request;

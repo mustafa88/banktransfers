@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Bank;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Bank\CampaignsRequest;
-use App\Models\bank\Banksdetail;
+use App\Models\Bank\Banksdetail;
 use App\Models\Bank\Campaigns;
-use App\Models\bank\Projects;
+use App\Models\Bank\Projects;
 use Illuminate\Http\Request;
 
 class CampaignsController extends Controller

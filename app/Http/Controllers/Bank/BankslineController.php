@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\bank;
+namespace App\Http\Controllers\Bank;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\bank\BankslineRequset;
-use App\Models\bank\Banks;
-use App\Models\bank\Banksdetail;
-use App\Models\bank\Banksline;
-use App\Models\bank\Enterprise;
+use App\Models\Bank\Banks;
+use App\Models\Bank\Banksdetail;
+use App\Models\Bank\Banksline;
+use App\Models\Bank\Enterprise;
 use App\Models\Bank\Title_one;
 use App\Traits\BankslineTrait;
 use App\Traits\HelpersTrait;
